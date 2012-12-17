@@ -7,9 +7,13 @@ from settings import *
 
 class Doi(object):
 
-    def __init__(self):
+    def __init__(self, 
+                 crossref_api_url=CROSSREF_API_URL,
+                 query_email=QUERY_EMAIL):
         xsd = open('../xsd/crossref_query_input2.0.xsd').read()
         self.porteira = Schema(xsd)
+        self.crossref_api_url = crossref_api_url
+        self.query_email = query_email
 
     def query_doi(self, xml):
         """
@@ -20,8 +24,8 @@ class Doi(object):
 
         if self.porteira.validate(xml):
             request_url = "{0}?format=xsd_xml&pid={1}&qdata={2}".format(
-                                                                        CROSSREF_API_URL,
-                                                                        QUERY_EMAIL,
+                                                                        self.crossref_api_url,
+                                                                        self.query_email,
                                                                         urllib2.quote(xml))
             query_result = urllib2.urlopen(request_url).read()
             dec = BeautifulSoup(query_result)
@@ -37,8 +41,8 @@ class Doi(object):
         Returns True or False for a given DOI number
         """
         request_url = "{0}?format=xsd_xml&pid={1}&id={2}".format(
-                                                                CROSSREF_API_URL,
-                                                                QUERY_EMAIL,
+                                                                self.crossref_api_url,
+                                                                self.query_email,
                                                                 doi)
 
         query_result = urllib2.urlopen(request_url).read()

@@ -1,7 +1,6 @@
 import unittest
-
+from urllib2 import HTTPError, URLError
 from lxml.etree import XMLSyntaxError
-
 from getdoi import Doi
 import datasample
 
@@ -16,12 +15,23 @@ class MainTests(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_query_doi_invalid_wrong_api_url(self):
+        doi = Doi(query_email='http://wrongurl.crossref.org/servlet/query')
+        self.assertRaises(URLError,
+                          lambda: doi.query_doi(xml=datasample.doc_without_doi))
+
+    def test_query_doi_invalid_query_email(self):
+        doi = Doi(query_email='invalid@email.com')
+        self.assertRaises(HTTPError,
+                          lambda: doi.query_doi(xml=datasample.doc_without_doi))
+
     def test_query_doi_unparsed_xml(self):
         """
         Querying crossfer for a DOI number with an unparsed xml
         """
         doi = Doi()
-        self.assertRaises(XMLSyntaxError, lambda: doi.query_doi(datasample.wrong_query_xml))
+        self.assertRaises(XMLSyntaxError,
+                          lambda: doi.query_doi(xml=datasample.wrong_query_xml))
 
     def test_query_doi_invalid_xml(self):
         """
@@ -49,7 +59,17 @@ class MainTests(unittest.TestCase):
         query_doi = doi.query_doi(xml=datasample.doc_with_doi)
         self.assertEqual(query_doi, "10.1590/S2179-975X2012005000002")
 
-    def test_doi_status_resolved(self):
+    def test_query_doi_is_resolved_wrong_api_url(self):
+        doi = Doi(crossref_api_url='http://wrongurl.crossref.org/servlet/query')
+        self.assertRaises(URLError,
+                          lambda: doi.is_resolved("10.1590/S2179-975X2012005000002"))
+
+    def test_query_doi_is_resolved_query_email(self):
+        doi = Doi(query_email='invalid@email.com')
+        self.assertRaises(HTTPError,
+                          lambda: doi.is_resolved("10.1590/S2179-975X2012005000002"))
+
+    def test_doi_is_resolved_resolved(self):
         """
         Querying crossfer using a registered DOI number
         """
@@ -57,7 +77,7 @@ class MainTests(unittest.TestCase):
         is_resolved = doi.is_resolved("10.1590/S2179-975X2012005000002")
         self.assertEqual(is_resolved, True)
 
-    def test_doi_status_unresolved(self):
+    def test_doi_is_resolved_unresolved(self):
         """
         Querying crossfer using a unregistered DOI number
         """
