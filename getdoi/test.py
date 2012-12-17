@@ -16,58 +16,54 @@ class MainTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_has_doi_unparsed_xml(self):
+    def test_query_doi_unparsed_xml(self):
         """
         Querying crossfer for a DOI number with an unparsed xml
         """
         doi = Doi()
-        self.assertRaises(XMLSyntaxError, lambda: doi.has_doi(datasample.wrong_xml))
+        self.assertRaises(XMLSyntaxError, lambda: doi.query_doi(datasample.wrong_xml))
 
-    def test_has_doi_invalid_xml(self):
+    def test_query_doi_invalid_xml(self):
         """
         Querying crossfer for a DOI number with invalid xml validated against schema
         """
         doi = Doi()
-        has_doi = doi.has_doi(xml=datasample.invalid_xml)
-        self.assertEqual(has_doi, False)
+        query_doi = doi.query_doi(xml=datasample.invalid_xml)
+        self.assertEqual(query_doi, False)
 
-    @unittest.expectedFailure
-    def test_has_doi_false(self):
+    def test_query_doi_false(self):
         """
         Querying crossfer for a DOI number accoding to a document metadata that
         does not have a DOI number registed
         """
         doi = Doi()
-        has_doi = doi.has_doi(xml=datasample.doc_without_doi)
-        self.assertEqual(has_doi, False)
+        query_doi = doi.query_doi(xml=datasample.doc_without_doi)
+        self.assertEqual(query_doi, False)
 
-    
-    def test_has_doi_true(self):
+    def test_query_doi_true(self):
         """
         Querying crossfer for a DOI number accoding to a document metadata that
         already have a DOI number registered
         """
         doi = Doi()
-        has_doi = doi.has_doi(xml=datasample.doc_with_doi)
-        self.assertEqual(has_doi, False)
+        query_doi = doi.query_doi(xml=datasample.doc_with_doi)
+        self.assertEqual(query_doi, "10.1590/S2179-975X2012005000002")
 
-    @unittest.expectedFailure
     def test_doi_status_resolved(self):
         """
         Querying crossfer using a registered DOI number
         """
         doi = Doi()
-        has_doi = doi.has_doi("10.4025/actasciagron.v32i3.6782")
-        self.assertEqual(has_doi, True)
+        is_resolved = doi.is_resolved("10.1590/S2179-975X2012005000002")
+        self.assertEqual(is_resolved, True)
 
-    @unittest.expectedFailure
     def test_doi_status_unresolved(self):
         """
         Querying crossfer using a unregistered DOI number
         """
         doi = Doi()
-        has_doi = doi.has_doi("XX.XXXXX/actasciagron.v32i3.6782")
-        self.assertEqual(has_doi, True)
+        is_resolved = doi.is_resolved("10.1590/S2179-975X20120050XXXXX")
+        self.assertEqual(is_resolved, False)
 
     @unittest.expectedFailure
     def test_doi_request(self):

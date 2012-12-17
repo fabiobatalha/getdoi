@@ -1,1 +1,2 @@
 porteira
+BeautifulSoup==3.2.1

@@ -1,7 +1,8 @@
 import urllib2
-import base64
-from lxml.etree import XMLSyntaxError
+from BeautifulSoup import BeautifulSoup
 from porteira.porteira import Schema
+
+from settings import *
 
 
 class Doi(object):
@@ -10,21 +11,45 @@ class Doi(object):
         xsd = open('../xsd/crossref_query_input2.0.xsd').read()
         self.porteira = Schema(xsd)
 
-    def has_doi(self, xml):
+    def query_doi(self, xml):
+        """
+        Returns a DOI number according to metadata contained into a given valid XML.
+        The XML must be compatible with crossref_query_input2.0.xsd
+        This method will return 'False' or a 'DOI number'.
+        """
+
         if self.porteira.validate(xml):
-            import pdb; pdb.set_trace()
-            request_url = "http://doi.crossref.org/servlet/query?format=xsd_xml&pid=bireme:bireme303&qdata={0}".format(urllib2.quote(xml))
-            response = urllib2.urlopen(request_url).read()
+            request_url = "{0}?format=xsd_xml&pid={1}&qdata={2}".format(
+                                                                        CROSSREF_API_URL,
+                                                                        QUERY_EMAIL,
+                                                                        urllib2.quote(xml))
+            query_result = urllib2.urlopen(request_url).read()
+            dec = BeautifulSoup(query_result)
+            try:
+                return dec.query_result.doi.string
+            except AttributeError:
+                return False
         else:
-            response = False
+            return False
 
-        return response
+    def is_resolved(self, doi):
+        """
+        Returns True or False for a given DOI number
+        """
+        request_url = "{0}?format=xsd_xml&pid={1}&id={2}".format(
+                                                                CROSSREF_API_URL,
+                                                                QUERY_EMAIL,
+                                                                doi)
 
-    def doi_status(self):
+        query_result = urllib2.urlopen(request_url).read()
+        dec = BeautifulSoup(query_result)
+        if dec.query_result.query['status'] == 'resolved':
+            return True
+        else:
+            return False
+
+    def doi_request(self, user, passwd, xml):
         pass
 
-    def doi_request(self):
-        pass
-
-    def doi_update(self):
+    def doi_update(self, user, passwd, xml):
         pass
