@@ -66,7 +66,13 @@ class MainTests(unittest.TestCase):
         self.assertEqual(is_resolved, False)
 
     @unittest.expectedFailure
-    def test_doi_request(self):
+    def test_doi_request_unparsed_xml(self):
+        self.assertEqual(1, 0, "broken")
+
+    def test_doi_request_invalid_xml(self):
+        self.assertEqual(1, 0, "broken")
+
+    def test_doi_request_valid_xml(self):
         self.assertEqual(1, 0, "broken")
 
     @unittest.expectedFailure
