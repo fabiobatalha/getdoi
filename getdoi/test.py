@@ -21,14 +21,14 @@ class MainTests(unittest.TestCase):
         Querying crossfer for a DOI number with an unparsed xml
         """
         doi = Doi()
-        self.assertRaises(XMLSyntaxError, lambda: doi.query_doi(datasample.wrong_xml))
+        self.assertRaises(XMLSyntaxError, lambda: doi.query_doi(datasample.wrong_query_xml))
 
     def test_query_doi_invalid_xml(self):
         """
         Querying crossfer for a DOI number with invalid xml validated against schema
         """
         doi = Doi()
-        query_doi = doi.query_doi(xml=datasample.invalid_xml)
+        query_doi = doi.query_doi(xml=datasample.invalid_query_xml)
         self.assertEqual(query_doi, False)
 
     def test_query_doi_false(self):
