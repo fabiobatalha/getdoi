@@ -1,6 +1,5 @@
 #encoding: UTF-8
-
-wrong_xml = u'''<?xml version = "1.0" encoding="UTF-8"?>
+wrong_request_xml = u'''<?xml version = "1.0" encoding="UTF-8"?>
 <query_batch
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 version="2.0"
@@ -12,7 +11,19 @@ xsi:schemaLocation="http://www.crossref.org/qschema/2.0 http://www.crossref.org/
 </head>
 '''.encode('utf-8')
 
-invalid_xml = u'''<?xml version = "1.0" encoding="UTF-8"?>
+wrong_query_xml = u'''<?xml version = "1.0" encoding="UTF-8"?>
+<query_batch
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+version="2.0"
+xmlns="http://www.crossref.org/qschema/2.0"
+xsi:schemaLocation="http://www.crossref.org/qschema/2.0 http://www.crossref.org/qschema/crossref_query_input2.0.xsd">
+<head>
+   <email_address>test@crossref.org</email_address>
+   <doi_batch_id>test</doi_batch_id>
+</head>
+'''.encode('utf-8')
+
+invalid_query_xml = u'''<?xml version = "1.0" encoding="UTF-8"?>
 <query_batch
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 version="2.0"
