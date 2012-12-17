@@ -7,7 +7,7 @@ from settings import *
 
 class Doi(object):
 
-    def __init__(self, 
+    def __init__(self,
                  crossref_api_url=CROSSREF_API_URL,
                  query_email=QUERY_EMAIL):
         xsd = open('../xsd/crossref_query_input2.0.xsd').read()

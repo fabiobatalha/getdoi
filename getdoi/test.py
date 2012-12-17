@@ -106,7 +106,15 @@ class MainTests(unittest.TestCase):
         self.assertEqual(1, 0, "broken")
 
     @unittest.expectedFailure
-    def test_doi_request_valid_xml(self):
+    def test_doi_request_valid_xml_wrong_login(self):
+        self.assertEqual(1, 0, "broken")
+
+    @unittest.expectedFailure
+    def test_doi_request_valid_xml_already_registered(self):
+        self.assertEqual(1, 0, "broken")
+
+    @unittest.expectedFailure
+    def test_doi_request_valid_xml_not_registered(self):
         self.assertEqual(1, 0, "broken")
 
     @unittest.expectedFailure
