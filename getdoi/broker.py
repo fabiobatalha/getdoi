@@ -5,7 +5,7 @@ from porteira.porteira import Schema
 from settings import *
 
 
-class Doi(object):
+class Brocker(object):
 
     def __init__(self,
                  crossref_api_url=CROSSREF_API_URL,
@@ -32,9 +32,9 @@ class Doi(object):
             try:
                 return dec.query_result.doi.string
             except AttributeError:
-                return False
+                return None
         else:
-            return False
+            return None
 
     def is_resolved(self, doi):
         """
@@ -52,8 +52,17 @@ class Doi(object):
         else:
             return False
 
-    def doi_request(self, user, passwd, xml):
+    def request(self, xml, user, passwd):
+        """
+        Returns True if the request was well done and False if their was an error
+        while sending the request to Crossref
+        """
+        request_url = "{0}?format=xsd_xml&pid={1}&id={2}".format(
+                                                                self.crossref_api_url,
+                                                                self.query_email,
+                                                                doi)
+
         pass
 
-    def doi_update(self, user, passwd, xml):
+    def update(self, xml, user, passwd):
         pass
