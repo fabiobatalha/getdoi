@@ -200,7 +200,7 @@
           0. Include module common to multiple CrossRef schemas
 
      ============================================================= -->
-	<xsd:include schemaLocation="common4.3.1.xsd"/>
+	<xsd:include schemaLocation="../xsd/common4.3.1.xsd"/>
 	<!-- =============================================================
 
                           1. Shared attributes
@@ -219,7 +219,7 @@
 
      ================================================================= -->
 	<!--      Most elements moved to common.xsd for version 3.0.0      -->
-	<xsd:import namespace="http://www.crossref.org/fundref.xsd" schemaLocation="fundref.xsd" />
+	<xsd:import namespace="http://www.crossref.org/fundref.xsd" schemaLocation="../xsd/fundref.xsd" />
 	<xsd:element name="doi_batch">
 		<xsd:annotation>
 			<xsd:documentation>Top level element for a metadata submission to CrossRef.

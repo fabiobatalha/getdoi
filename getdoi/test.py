@@ -101,46 +101,32 @@ class MainTests(unittest.TestCase):
         """
         Requesting a DOI number passing a unparseable xml
         """
-        doi = Brocker()
+        doi = Brocker(xsd='../xsd/crossref4.3.1.xsd')
         self.assertRaises(XMLSyntaxError,
-                          lambda: doi.request(xml=datasample.wrong_query_xml,
-                                              user='bireme',
-                                              passwd='bireme303'))
+                          lambda: doi.request(xml=datasample.wrong_query_xml))
 
-    @unittest.expectedFailure
     def test_doi_request_invalid_xml(self):
         """
         Requesting a DOI number passing a ivalid xml according to the
-        deposit schema http://www.crossref.org/schema/deposit/common4.3.1.xsd
+        deposit schema http://www.crossref.org/schema/deposit/crossref4.3.1.xsd
         """
-        doi = Brocker()
-        self.assertRaises(XMLSyntaxError,
-                          lambda: doi.request(xml=datasample.invalid_query_xml,
-                                              user='bireme',
-                                              passwd='bireme303'))
+        doi = Brocker(xsd='../xsd/crossref4.3.1.xsd')
+        self.assertEquals(None, doi.request(xml=datasample.invalid_query_xml))
 
-    @unittest.expectedFailure
     def test_doi_request_valid_xml_wrong_login(self):
         """
         Requesting a DOI number with an invalid username and/or password
         """
-        doi = Brocker()
-        self.assertRaises(XMLSyntaxError,
-                          lambda: doi.request(xml=datasample.invalid_query_xml,
-                                              user='xxx',
-                                              passwd='xxx'))
+        doi = Brocker(xsd='../xsd/crossref4.3.1.xsd', user='xxx', passwd='xxx')
+        self.assertRaises(HTTPError, lambda: doi.request(xml=datasample.valid_request_xml))
 
-    @unittest.expectedFailure
-    def test_doi_request_valid_xml_already_registered(self):
-        self.assertEqual(1, 0, "broken")
-
-    @unittest.expectedFailure
-    def test_doi_request_valid_xml_not_registered(self):
-        self.assertEqual(1, 0, "broken")
-
-    @unittest.expectedFailure
-    def test_doi_update(self):
-        self.assertEqual(1, 0, "broken")
+    def test_doi_request_valid_xml(self):
+        """
+        Requesting a DOI number
+        """
+        doi = Brocker(xsd='../xsd/crossref4.3.1.xsd')
+        result = doi.request(xml=datasample.valid_request_xml)
+        self.assertEquals(result, True)
 
 if __name__ == '__main__':
     unittest.main()
